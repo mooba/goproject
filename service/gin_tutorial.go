@@ -1,6 +1,7 @@
 package service
 
 import (
+	"archive/zip"
 	"bufio"
 	"encoding/csv"
 	"fmt"
@@ -9,6 +10,7 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
+	"os"
 )
 
 const (
@@ -127,4 +129,17 @@ func BindWithJson(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"status": "you are logged in"})
+}
+
+func Export(c *gin.Context) {
+	c.Writer.Header().Set("Content-type", "application/octet-stream")
+	c.Writer.Header().Set("Content-Disposition", "attachment; filename='filename.zip'")
+	ar :=  zip.NewWriter(c.Writer)
+	file1, _ := os.Open("filename1")
+	file2, _ := os.Open("filename2")
+	f1, _ := ar.Create("filename1")
+	io.Copy(f1, file1)
+	f2, _ := ar.Create("filename1")
+	io.Copy(f2, file2)
+	ar.Close()
 }

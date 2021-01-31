@@ -66,6 +66,8 @@ func runWeb()  {
 	engine.POST("/upload", service.UploadSingleFile)
 	engine.POST("/loginJSON", service.BindWithJson)
 
+	engine.GET("/export", service.Export)
+
 
 	// 启动HTTP服务，默认在0.0.0.0:8080启动服务
 	if err := engine.Run(); err != nil {
