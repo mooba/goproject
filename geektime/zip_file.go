@@ -1,4 +1,3 @@
-// Copyright 2021 Shopee, Inc.
 // author pengchengbai
 // date 2021/1/27
 

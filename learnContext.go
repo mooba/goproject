@@ -13,7 +13,76 @@ func main() {
 	fmt.Println("hello")
 	//cancelBasedOnContext()
 
-	contextWithValue()
+	//contextWithValue()
+
+	contextWithTimeout()
+
+	//TimeoutOpWithResponse(1*time.Second, TestFunc, 1*time.Second)
+}
+
+func contextWithTimeout() {
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	defer cancel()
+
+	result, err := handle(ctx)
+	if err != nil {
+		fmt.Printf("error: %s", err)
+	} else {
+		fmt.Printf("result:%v", result)
+	}
+	fmt.Println("父协程运行中")
+	time.Sleep(10*time.Second)
+	fmt.Println("父协程退出")
+}
+
+func TestFunc(sleepTime time.Duration) (interface{}, error) {
+	time.Sleep(sleepTime)
+	return fmt.Sprintf("I sleeped %s", sleepTime.String()), nil
+}
+
+type MyResult struct {
+	Result int
+}
+
+type Response struct {
+	MyResult *MyResult
+	Err error
+}
+
+func handle(ctx context.Context) (result *MyResult, err error)  {
+	select {
+	case <-ctx.Done():
+		fmt.Println("handle", ctx.Err())
+		return nil, fmt.Errorf("handle %s", ctx.Err())
+	case res := <-handleHelper(ctx):
+		return res.MyResult, res.Err
+	}
+}
+
+func handleHelper(ctx context.Context) <- chan *Response{
+	chResp := make(chan *Response, 1)
+	go func() {
+		result, err := actualHandle()
+		if err != nil {
+			return
+		} else {
+			chResp <- &Response{MyResult: result, Err: nil}
+		}
+		fmt.Println("子协程退出")
+	}()
+	return chResp
+}
+
+func actualHandle() (*MyResult, error) {
+	i := 0
+	for {
+		time.Sleep(500*time.Millisecond)
+		fmt.Println("子协程运行中")
+		if i == 10 {
+			break
+		}
+	}
+	return &MyResult{1}, nil
 }
 
 
