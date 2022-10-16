@@ -28,7 +28,7 @@ func main() {
 	case <-abort:
 		fmt.Println("Launch aborted!")
 		return
-	case <-time.After(10*time.Second):
+	case <-time.After(10 * time.Second):
 		// do nothing
 	}
 
@@ -37,4 +37,15 @@ func main() {
 
 func launch() {
 	fmt.Println("launch")
+}
+
+func launch1() {
+	fmt.Println("commencing countdown...")
+	tick := time.Tick(1 * time.Second)
+
+	for countDown := 10; countDown > 0; countDown-- {
+		fmt.Println(countDown)
+		<-tick
+	}
+	launch()
 }

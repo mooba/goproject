@@ -1,7 +1,7 @@
 // author pengchengbai@shopee.com
 // date 2021/3/21
 
-package ch9
+package main
 
 import (
 	"fmt"

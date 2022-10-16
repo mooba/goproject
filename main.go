@@ -40,7 +40,9 @@ func init() {
 
 func main() {
 
-	runWeb()
+	fmt.Println(func1())
+
+	//runWeb()
 }
 
 func runWeb()  {
@@ -75,10 +77,37 @@ func runWeb()  {
 	}
 }
 
+func runWeb2() {
+	//engine := gin.Default()
+	//engine.Group()
+	//engine.GET()
+
+}
+
 
 
 func learnMath() {
 	fmt.Println(greet.Morning)
+}
+
+func func1() error {
+	err := func2()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func func2() error {
+	err := func3()
+	if err != nil {
+		 return err
+	}
+	return nil
+}
+
+func func3() error {
+	return fmt.Errorf("hello error")
 }
 
 
